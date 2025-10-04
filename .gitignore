@@ -1,0 +1,27 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.pytest_cache/
+.cov/
+dist/
+build/
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+.pydev/
+.vscode/
+.idea/
+*.log
+*.json  # Exclude JSON files that are generated as output
+*.csv   # Exclude CSV files that are generated as output
+*.html  # Exclude HTML files that are generated as output
+.DS_Store
+.pypirc

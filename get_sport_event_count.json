@@ -1,0 +1,86 @@
+{
+    "badminton": {
+        "live": 0,
+        "total": 70
+    },
+    "futsal": {
+        "live": 4,
+        "total": 349
+    },
+    "ice-hockey": {
+        "live": 6,
+        "total": 242
+    },
+    "beach-volley": {
+        "live": 0,
+        "total": 29
+    },
+    "minifootball": {
+        "live": 2,
+        "total": 127
+    },
+    "darts": {
+        "live": 1,
+        "total": 16
+    },
+    "table-tennis": {
+        "live": 8,
+        "total": 615
+    },
+    "american-football": {
+        "live": 39,
+        "total": 237
+    },
+    "aussie-rules": {
+        "live": 0,
+        "total": 4
+    },
+    "floorball": {
+        "live": 0,
+        "total": 44
+    },
+    "football": {
+        "live": 197,
+        "total": 5615
+    },
+    "tennis": {
+        "live": 18,
+        "total": 225
+    },
+    "baseball": {
+        "live": 1,
+        "total": 17
+    },
+    "basketball": {
+        "live": 51,
+        "total": 615
+    },
+    "bandy": {
+        "live": 0,
+        "total": 2
+    },
+    "handball": {
+        "live": 8,
+        "total": 489
+    },
+    "cricket": {
+        "live": 0,
+        "total": 20
+    },
+    "waterpolo": {
+        "live": 1,
+        "total": 22
+    },
+    "rugby": {
+        "live": 2,
+        "total": 103
+    },
+    "volleyball": {
+        "live": 11,
+        "total": 335
+    },
+    "esports": {
+        "live": 6,
+        "total": 81
+    }
+}

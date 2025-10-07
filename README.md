@@ -1,6 +1,6 @@
 # Sofascrape
 
-A Python library for scraping and interacting with SofaScore APIs to access football (soccer) statistics, events, and other sports data.
+A Python library for scraping and interacting with SofaScore APIs to access football statistics, events, and other sports data.
 
 ## Installation
 
@@ -8,187 +8,84 @@ A Python library for scraping and interacting with SofaScore APIs to access foot
 pip install sofascrape
 ```
 
-## Quick Start
+## Features
 
-### Using the Client Class (Recommended)
+- Easy access to SofaScore API endpoints
+- Built-in data formatting and export capabilities (JSON, CSV)
+- Context manager support for resource management
+- Comprehensive coverage of SofaScore API endpoints
 
-```python
-from sofascrape import SofascrapeClient, FormatOptions
+## Usage
 
-# Initialize the client
-with SofascrapeClient() as client:
-    # Get football categories
-    categories = client.get_football_categories_all()
-    print(categories)
-
-    # Save data to a file
-    options = FormatOptions(format_type="json", save_to_file=True, filename="categories")
-    client.get_football_categories_all(format_type="json", save_to_file=True, filename="categories")
-
-    # Get scheduled events for a specific date
-    events = client.get_scheduled_events(date="2023-12-25")
-    print(events)
-```
-
-### Using Standalone Functions (Backward Compatibility)
-
-```python
-from sofascrape import get_football_categories_all, get_scheduled_events
-
-# Using standalone functions (returns data directly)
-categories = get_football_categories_all()
-print(categories)
-
-# With formatting options
-events = get_scheduled_events(date="2023-12-25", format_type="json", save_to_file=True, filename="events")
-print(events)
-```
-
-## Configuration
-
-You can customize the client behavior with configuration options:
-
-```python
-from sofascrape import SofascrapeClient, SofascrapeConfig
-
-# Custom configuration
-config = SofascrapeConfig(
-    base_url="https://www.sofascore.com",
-    headless=True,  # Run browser in headless mode
-    timeout=30000,  # 30 seconds timeout
-    user_agent="Custom User Agent",
-    max_retries=3,  # Number of retry attempts
-    delay_between_retries=1.0  # Delay in seconds between retries
-)
-
-client = SofascrapeClient(config)
-```
-
-## Available Methods
-
-The library provides access to many SofaScore API endpoints:
-
-### Football Data
-- `get_football_categories_all()` - Get all football categories
-- `get_sport_event_count(sport_id)` - Get event count for a sport
-- `get_scheduled_events(date)` - Get scheduled events for a date
-- `get_football_live_events()` - Get live football events
-- `get_football_odds(provider_id, date)` - Get football odds
-
-### Event Data
-- `get_event_data(event_id)` - Get data for a specific event
-- `get_event_incidents(event_id)` - Get incidents for an event
-- `get_event_lineups(event_id)` - Get lineups for an event
-- `get_event_h2h(event_id)` - Get head-to-head data
-- `get_event_comments(event_id)` - Get comments for an event
-
-### Team Data
-- `get_team_data(team_id)` - Get data for a team
-- `get_team_featured_players(team_id)` - Get featured players for a team
-- `get_team_statistics_seasons(team_id)` - Get team statistics seasons
-
-### Tournament Data
-- `get_unique_tournament_data(ut_id)` - Get tournament data
-- `get_tournament_standings(tournament_id, season_id)` - Get tournament standings
-- `get_unique_tournament_seasons(ut_id)` - Get tournament seasons
-
-### Player Data
-- `get_player_attribute_overviews(player_id)` - Get player attribute overviews
-
-And many more endpoints! Check the source code for a complete list.
-
-## Format Options
-
-You can control how data is returned and saved:
-
-```python
-from sofascrape import FormatOptions
-
-# Default: Return data as dictionary
-data = get_football_categories_all()
-
-# Save as JSON file
-data = get_football_categories_all(format_type="json", save_to_file=True, filename="categories")
-
-# Save as CSV file
-data = get_scheduled_events(date="2023-12-25", format_type="csv", save_to_file=True, filename="events")
-```
-
-## Error Handling
-
-The library includes proper error handling for network requests and data parsing:
+### Basic Usage
 
 ```python
 from sofascrape import SofascrapeClient
 
+# Use context manager for automatic resource management
+with SofascrapeClient() as client:
+    # Get football categories
+    categories = client.get_sport_categories()
+    print(categories.data)  # Access raw data
+    
+    # Save as JSON file
+    categories.json("football_categories.json")
+    
+    # Save as CSV file
+    categories.csv("football_categories.csv")
+```
+
+### Advanced Usage
+
+```python
+from sofascrape import SofascrapeClient
+
+# Initialize client with custom options
+client = SofascrapeClient(headless=True, timeout=60000)
+
 try:
-    with SofascrapeClient() as client:
-        data = client.get_football_categories_all()
-        if data:
-            print(f"Retrieved {len(data)} categories")
-        else:
-            print("No data retrieved")
-except Exception as e:
-    print(f"Error occurred: {e}")
+    client.start()  # Manually start the client
+    
+    # Get live football events
+    live_events = client.get_live_events()
+    
+    # Access data directly
+    for event in live_events:
+        print(event)
+    
+    # Get specific tournament standings
+    standings = client.get_tournament_standings(tournament_id=123, season_id=456)
+    standings.json("standings.json")
+    
+finally:
+    client.close()  # Manually close the client
 ```
 
-## Development
+## Available Methods
 
-### Building the Package
+The library provides access to various SofaScore API endpoints:
 
-To build the package locally:
+- `get_sport_categories()` - Get all available football categories
+- `get_live_events()` - Get all live football events
+- `get_event_data(event_id)` - Get core data for a specific event
+- `get_event_lineups(event_id)` - Get lineups for a specific event
+- `get_tournament_standings(tournament_id, season_id)` - Get standings for a tournament
+- `get_team_info(team_id)` - Get information about a specific team
+- And many more endpoints...
 
-```bash
-pip install build
-python -m build
-```
+For a complete list of available methods, check the client.py file.
 
-### Uploading to PyPI
+## Response Objects
 
-To upload to TestPyPI or PyPI, you'll need to set up environment variables first:
+API responses are wrapped in `ApiResponse` objects that provide:
 
-```bash
-# Set your PyPI tokens as environment variables:
-
-# On Windows Command Prompt:
-set PYPI_API_TOKEN=pypi-your-pypi-token-here
-set TESTPYPI_API_TOKEN=pypi-your-testpypi-token-here
-
-# On Windows PowerShell:
-$env:PYPI_API_TOKEN="pypi-your-pypi-token-here"
-$env:TESTPYPI_API_TOKEN="pypi-your-testpypi-token-here"
-
-# Then build and upload:
-python -m build
-python -m twine upload --repository testpypi dist/*  # for TestPyPI
-python -m twine upload dist/*  # for PyPI
-```
-
-Or use the provided upload script after setting the environment variables:
-
-```bash
-python upload_package.py
-```
-
-### Running Tests
-
-```bash
-pip install -e .[dev]
-pytest
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Submit a pull request
+- Direct access to data via `.data`
+- JSON export via `.json([filename])`
+- CSV export via `.csv([filename])`
+- Dictionary-like access via `[]`
+- Iteration support via `iter()`
+- Length via `len()`
 
 ## License
 
-MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Disclaimer
-
-This library is intended for educational and personal use. Please respect SofaScore's terms of service and rate limits when using this library. The authors are not responsible for any misuse of this library.
+MIT License. See the [LICENSE](LICENSE) file for more details.

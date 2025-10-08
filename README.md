@@ -20,10 +20,10 @@ pip install sofascrape
 ### Basic Usage
 
 ```python
-from sofascrape import SofascrapeClient
+from sofascrape import SofascoreClient
 
 # Use context manager for automatic resource management
-with SofascrapeClient() as client:
+with SofascoreClient() as client:
     # Get football categories
     categories = client.get_sport_categories()
     print(categories.data)  # Access raw data
@@ -35,31 +35,6 @@ with SofascrapeClient() as client:
     categories.csv("football_categories.csv")
 ```
 
-### Advanced Usage
-
-```python
-from sofascrape import SofascrapeClient
-
-# Initialize client with custom options
-client = SofascrapeClient(headless=True, timeout=60000)
-
-try:
-    client.start()  # Manually start the client
-    
-    # Get live football events
-    live_events = client.get_live_events()
-    
-    # Access data directly
-    for event in live_events:
-        print(event)
-    
-    # Get specific tournament standings
-    standings = client.get_tournament_standings(tournament_id=123, season_id=456)
-    standings.json("standings.json")
-    
-finally:
-    client.close()  # Manually close the client
-```
 
 ## Available Methods
 

@@ -7,7 +7,7 @@ including live events, match statistics, player information, and more.
 
 from .client import SofascoreClient
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 __author__ = "Chumari"
 __email__ = "dchumari@gmail.com"
 __description__ = "A Python library for scraping and interacting with SofaScore APIs"

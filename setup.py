@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="sofascrape",
-    version="0.1.1",
+    version="0.1.2",
     author="Chumari",
     author_email="dchumari@gmail.com",
     description="A Python library for scraping and interacting with SofaScore APIs",

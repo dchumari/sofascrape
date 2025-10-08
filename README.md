@@ -10,70 +10,51 @@ pip install sofascrape
 
 ## Quick Start
 
-### Using the Client Class (Recommended)
+### Using the Client Class (New Simple Method)
 
 ```python
-from sofascrape import SofascrapeClient, FormatOptions
+from sofascrape import SofascoreClient
 
-# Initialize the client
-with SofascrapeClient() as client:
+# Use directly without context manager
+client = SofascoreClient()
+
+# Get football categories
+categories = client.get_sport_categories()
+print(categories.data)  # Access raw data
+
+# Save as JSON file
+categories.json("football_categories.json")
+
+# Save as CSV file
+categories.csv("football_categories.csv")
+```
+
+### Using the Client Class (Original Context Manager Method - Still Supported)
+
+```python
+from sofascrape import SofascoreClient
+
+# Initialize the client with context manager (optional, but ensures cleanup)
+with SofascoreClient() as client:
     # Get football categories
-    categories = client.get_football_categories_all()
+    categories = client.get_sport_categories()
     print(categories)
 
     # Save data to a file
-    options = FormatOptions(format_type="json", save_to_file=True, filename="categories")
-    client.get_football_categories_all(format_type="json", save_to_file=True, filename="categories")
-
-    # Get scheduled events for a specific date
-    events = client.get_scheduled_events(date="2023-12-25")
-    print(events)
-```
-
-### Using Standalone Functions (Backward Compatibility)
-
-```python
-from sofascrape import get_football_categories_all, get_scheduled_events
-
-# Using standalone functions (returns data directly)
-categories = get_football_categories_all()
-print(categories)
-
-# With formatting options
-events = get_scheduled_events(date="2023-12-25", format_type="json", save_to_file=True, filename="events")
-print(events)
-```
-
-## Configuration
-
-You can customize the client behavior with configuration options:
-
-```python
-from sofascrape import SofascrapeClient, SofascrapeConfig
-
-# Custom configuration
-config = SofascrapeConfig(
-    base_url="https://www.sofascore.com",
-    headless=True,  # Run browser in headless mode
-    timeout=30000,  # 30 seconds timeout
-    user_agent="Custom User Agent",
-    max_retries=3,  # Number of retry attempts
-    delay_between_retries=1.0  # Delay in seconds between retries
-)
-
-client = SofascrapeClient(config)
+    categories.json("categories.json")
+    categories.csv("categories.csv")
 ```
 
 ## Available Methods
 
 The library provides access to many SofaScore API endpoints:
 
-### Football Data
-- `get_football_categories_all()` - Get all football categories
+### Sport Data
+- `get_sport_categories()` - Get all sport categories
 - `get_sport_event_count(sport_id)` - Get event count for a sport
-- `get_scheduled_events(date)` - Get scheduled events for a date
-- `get_football_live_events()` - Get live football events
-- `get_football_odds(provider_id, date)` - Get football odds
+- `get_sport_scheduled_events(date)` - Get scheduled events for a date
+- `get_live_events()` - Get live events
+- `get_newly_added_events()` - Get newly added events
 
 ### Event Data
 - `get_event_data(event_id)` - Get data for a specific event
@@ -81,37 +62,67 @@ The library provides access to many SofaScore API endpoints:
 - `get_event_lineups(event_id)` - Get lineups for an event
 - `get_event_h2h(event_id)` - Get head-to-head data
 - `get_event_comments(event_id)` - Get comments for an event
+- `get_event_ai_insights(event_id, language="en")` - Get AI-generated match insights
+- `get_event_pregame_form(event_id)` - Get pregame form for an event
+- `get_event_managers(event_id)` - Get managers for an event
+- `get_event_highlights(event_id)` - Get video highlights for an event
+- `get_event_votes(event_id)` - Get votes/polls for an event
 
 ### Team Data
-- `get_team_data(team_id)` - Get data for a team
+- `get_team_info(team_id)` - Get core information about a specific team
 - `get_team_featured_players(team_id)` - Get featured players for a team
-- `get_team_statistics_seasons(team_id)` - Get team statistics seasons
+- `get_team_statistics_seasons(team_id)` - Get available seasons for team statistics
+- `get_team_statistics(team_id, ut_id, season_id)` - Get team statistics for a specific tournament and season
 
 ### Tournament Data
-- `get_unique_tournament_data(ut_id)` - Get tournament data
-- `get_tournament_standings(tournament_id, season_id)` - Get tournament standings
-- `get_unique_tournament_seasons(ut_id)` - Get tournament seasons
+- `get_unique_tournament_info(ut_id)` - Get core information about a specific unique tournament
+- `get_unique_tournament_seasons(ut_id)` - Get all seasons for a specific unique tournament
+- `get_tournament_standings(tournament_id, season_id)` - Get standings for a specific tournament and season
+- `get_tournament_standings_by_type(ut_id, season_id, standings_type="total")` - Get tournament standings by type (total, home, away)
+- `get_tournament_events_last(ut_id, season_id, offset=0)` - Get last events from a tournament season
+- `get_tournament_events_next(ut_id, season_id, offset=0)` - Get next events from a tournament season
+- `get_tournament_top_players(ut_id, season_id)` - Get top players for a tournament season
+- `get_tournament_top_teams(ut_id, season_id)` - Get top teams for a tournament season
+- `get_tournament_rounds(ut_id, season_id)` - Get rounds for a tournament season
+- `get_tournament_events_by_round(ut_id, season_id, round_number)` - Get events for a specific round in a tournament season
+- `get_tournament_cuptrees(ut_id, season_id)` - Get cup tree structure for a specific tournament and season
+
+### Betting and Odds
+- `get_odds_providers(country_code)` - Get odds providers for a specific country
+- `get_branding_providers(country_code)` - Get branding data for odds providers in a specific country
+- `get_event_winning_odds(event_id, provider_id)` - Get winning odds for a specific event and provider
+- `get_event_featured_odds(event_id, provider_id)` - Get featured odds for a specific event and provider
+- `get_event_all_odds(event_id, provider_id)` - Get all odds for a specific event and provider
+- `get_team_streaks_betting_odds(event_id, provider_id)` - Get team streaks for betting odds
 
 ### Player Data
-- `get_player_attribute_overviews(player_id)` - Get player attribute overviews
+- `get_player_attributes(player_id)` - Get attributes for a specific player
 
-And many more endpoints! Check the source code for a complete list.
+### Other Methods
+- `get_event_tv_channels(event_id, country_code)` - Get TV channels for a specific event in a country
+- `get_event_win_probability(event_id)` - Get win probability graph data for a specific event
+- `get_event_graph(event_id)` - Get graph data for a specific event
 
-## Format Options
+## Saving Data
 
-You can control how data is returned and saved:
+All API responses support saving as JSON or CSV format:
 
 ```python
-from sofascrape import FormatOptions
+from sofascrape import SofascoreClient
 
-# Default: Return data as dictionary
-data = get_football_categories_all()
+client = SofascoreClient()
 
-# Save as JSON file
-data = get_football_categories_all(format_type="json", save_to_file=True, filename="categories")
+# Get data
+categories = client.get_sport_categories()
 
-# Save as CSV file
-data = get_scheduled_events(date="2023-12-25", format_type="csv", save_to_file=True, filename="events")
+# Save as JSON
+categories.json("football_categories.json")
+
+# Save as CSV
+categories.csv("football_categories.csv")
+
+# Access raw data
+raw_data = categories.data
 ```
 
 ## Error Handling
@@ -119,17 +130,22 @@ data = get_scheduled_events(date="2023-12-25", format_type="csv", save_to_file=T
 The library includes proper error handling for network requests and data parsing:
 
 ```python
-from sofascrape import SofascrapeClient
+from sofascrape import SofascoreClient
+
+# Direct instantiation
+client = SofascoreClient()
 
 try:
-    with SofascrapeClient() as client:
-        data = client.get_football_categories_all()
-        if data:
-            print(f"Retrieved {len(data)} categories")
-        else:
-            print("No data retrieved")
+    data = client.get_sport_categories()
+    if data:
+        print(f"Retrieved {len(data)} categories")
+        # Access raw data: data.data
+    else:
+        print("No data retrieved")
 except Exception as e:
     print(f"Error occurred: {e}")
+finally:
+    client.close()  # Ensure resources are cleaned up
 ```
 
 ## Development

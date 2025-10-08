@@ -183,7 +183,7 @@ python -m twine upload dist/*  # for PyPI
 Or use the provided upload script after setting the environment variables:
 
 ```bash
-python upload_package.py
+python upload_to_pypi.py
 ```
 
 ### Running Tests

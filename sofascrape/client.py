@@ -156,7 +156,7 @@ class SofascoreClient:
                 raise ValueError(f"Failed to parse JSON from page content: {e}")
         else:
             raise ValueError("No JSON data found in page content")
-        
+            
     def close(self):
         """Clean up resources"""
         try:

@@ -20,8 +20,17 @@ env/
 .vscode/
 .idea/
 *.log
-*.json  # Exclude JSON files that are generated as output
-*.csv   # Exclude CSV files that are generated as output
-*.html  # Exclude HTML files that are generated as output
+*.json
+*.csv
+*.html
 .DS_Store
 .pypirc
+# Exclude generated/output files
+output/
+downloads/
+example*.json
+example*.csv
+get_*.json
+get_*.csv
+get_*.html
+get_*.txt

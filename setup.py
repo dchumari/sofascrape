@@ -27,10 +27,9 @@ setup(
     ],
     python_requires=">=3.7",
     install_requires=[
-        "playwright>=1.20.0",
-        "pandas>=1.3.0",
-        "requests>=2.25.0",
-        "beautifulsoup4>=4.9.0",
+        "playwright>=1.30.0",
+        "beautifulsoup4>=4.11.0",
+        "requests>=2.28.0",
     ],
     extras_require={
         "dev": [
